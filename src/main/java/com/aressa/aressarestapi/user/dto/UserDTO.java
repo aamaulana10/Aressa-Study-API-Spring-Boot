@@ -2,7 +2,11 @@ package com.aressa.aressarestapi.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UserDTO {
 
@@ -18,16 +22,33 @@ public class UserDTO {
     @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
-    @NotEmpty(message = "Date of birth is required")
-    private String dob;
+    @NotEmpty(message = "Gender is required")
+    private String gender;
+
+    @NotEmpty(message = "PhoneNumber is required")
+    private String phoneNumber;
+
+    @NotEmpty(message = "PhotoUrl is required")
+    private String photoUrl;
+
+    @NotNull(message = "Date of birth is required")
+    private LocalDate dob;
+
+    private String createdAt;
+    private String updatedAt;
 
     public UserDTO() {}
 
-    public UserDTO(String username, String email, String password, String dob) {
+    public UserDTO(String username, String email, String gender, String photoUrl, String phoneNumber, String password, LocalDate dob, String createdAt, String updatedAt) {
         this.username = username;
         this.email = email;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
         this.password = password;
         this.dob = dob;
+        this.photoUrl = photoUrl;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     // Getter dan Setter
@@ -47,6 +68,22 @@ public class UserDTO {
         this.email = email;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -55,11 +92,27 @@ public class UserDTO {
         this.password = password;
     }
 
-    public String getDob() {
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 }

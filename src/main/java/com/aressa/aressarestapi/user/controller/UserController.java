@@ -5,9 +5,11 @@ import com.aressa.aressarestapi.user.dto.UserDTO;
 import com.aressa.aressarestapi.user.model.User;
 import com.aressa.aressarestapi.user.service.UserService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +22,11 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-
     @Autowired
     public UserService userService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
     public List<User> getAllUser(){
@@ -38,18 +42,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) {
-        User user = new User(
-                userDTO.getUsername(),
-                userDTO.getEmail(),
-                userDTO.getPassword(),
-                userDTO.getDob(),
-                LocalDateTime.now().toString(), // created_at
-                LocalDateTime.now().toString()  // updated_at
-        );
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
 
-        User newUser = userService.createUser(user);
-        return ResponseEntity.ok(newUser);
+        User user = modelMapper.map(userDTO, User.class);
+        User savedUser = userService.createUser(user);
+
+        UserDTO responseDTO = modelMapper.map(savedUser, UserDTO.class);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+
     }
 
     @DeleteMapping("/{id}")
